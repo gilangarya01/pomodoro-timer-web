@@ -9,14 +9,18 @@ let intervalWaktu;
 
 startBtn.addEventListener("click", () => pomodoroFunc());
 stopBtn.addEventListener("click", () => {
-  startBtn.classList.remove("hide-btn");
-  stopBtn.classList.add("hide-btn");
+  toggleClass();
   clearInterval(intervalWaktu);
+  banyakKerja = 0;
 });
 
+function toggleClass() {
+  startBtn.classList.toggle("hide-btn");
+  stopBtn.classList.toggle("hide-btn");
+}
+
 function pomodoroFunc() {
-  startBtn.classList.add("hide-btn");
-  stopBtn.classList.remove("hide-btn");
+  toggleClass();
 
   if (focus) {
     banyakKerja++;
@@ -24,8 +28,8 @@ function pomodoroFunc() {
     setTimer(1500);
   } else {
     activity.textContent = "Break";
-    if (banyakKerja > 3) {
-      setTimer(600);
+    if (banyakKerja > 2) {
+      setTimer(1200);
       banyakKerja = 0;
     } else {
       setTimer(300);
@@ -45,7 +49,7 @@ function setTimer(banyakDetik) {
     timer.textContent = `${menit}:${sisaDetik}`;
 
     if (--detik < 0) {
-      clearInterval(waktu);
+      clearInterval(intervalWaktu);
       activity.textContent == "Focus" ? (focus = false) : (focus = true);
       pomodoroFunc();
     }
