@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: FiraCode Nerd Font;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.container h1 {
+  font-size: 100px;
+}
+
+.container h2 {
+  font-size: 30px;
+}
+
+.container .count-area {
+  padding: 5rem;
+  border-radius: 50%;
+  border: 10px solid white;
+}
+
+.container button {
+  margin-top: 2rem;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 20px;
+  border: 2px solid white;
+  color: white;
+  background-color: rgba(0, 0, 0, 255);
+}
+
+.container button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+
+.hide-btn {
+  display: none;
+}
