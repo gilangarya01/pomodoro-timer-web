@@ -1,57 +1,70 @@
 const startBtn = document.getElementById("start-btn");
-const stopBtn = document.getElementById("stop-btn");
-const timer = document.getElementById("timer");
-const activity = document.getElementById("activity");
+const resetBtn = document.getElementById("reset-btn");
+const waktu = document.getElementById("timer");
+const aktivitas = document.getElementById("activity");
 
-let focus = true;
+let fokus = true;
 let banyakKerja = 0;
 let intervalWaktu;
 
-startBtn.addEventListener("click", () => pomodoroFunc());
-stopBtn.addEventListener("click", () => {
-  toggleClass();
-  clearInterval(intervalWaktu);
-  banyakKerja = 0;
-});
+startBtn.addEventListener("click", pomodoroFunc);
+resetBtn.addEventListener("click", resetPomodoro);
 
-function toggleClass() {
+function resetPomodoro() {
+  toggleButtons();
+  clearInterval(intervalWaktu);
+  resetWaktu();
+}
+
+function resetWaktu() {
+  waktu.textContent = formatWaktu(25 * 60);
+  aktivitas.textContent = "Focus";
+  banyakKerja = 0;
+  fokus = true;
+}
+
+function toggleButtons() {
   startBtn.classList.toggle("hide-btn");
-  stopBtn.classList.toggle("hide-btn");
+  resetBtn.classList.toggle("hide-btn");
 }
 
 function pomodoroFunc() {
-  toggleClass();
+  toggleButtons();
 
-  if (focus) {
+  if (fokus) {
     banyakKerja++;
-    activity.textContent = "Focus";
-    setTimer(1500);
+    aktivitas.textContent = "Focus";
+    setWaktu(25 * 60);
   } else {
-    activity.textContent = "Break";
+    aktivitas.textContent = "Break";
     if (banyakKerja > 2) {
-      setTimer(1200);
+      setWaktu(20 * 60);
       banyakKerja = 0;
     } else {
-      setTimer(300);
+      setWaktu(5 * 60);
     }
   }
 }
 
-function setTimer(banyakDetik) {
-  let detik = banyakDetik;
+function setWaktu(totalDetik) {
+  let detik = totalDetik;
   intervalWaktu = setInterval(() => {
-    let menit = Math.floor(detik / 60);
-    let sisaDetik = detik % 60;
+    waktu.textContent = formatWaktu(detik);
 
-    menit = menit < 10 ? "0" + menit : menit;
-    sisaDetik = sisaDetik < 10 ? "0" + sisaDetik : sisaDetik;
-
-    timer.textContent = `${menit}:${sisaDetik}`;
-
-    if (--detik < 0) {
+    if (detik-- <= 0) {
       clearInterval(intervalWaktu);
-      activity.textContent == "Focus" ? (focus = false) : (focus = true);
+      fokus = !fokus;
       pomodoroFunc();
     }
   }, 1000);
+}
+
+function formatWaktu(totalDetik) {
+  let menit = Math.floor(totalDetik / 60);
+  let sisaDetik = totalDetik % 60;
+
+  menit = menit < 10 ? "0" + menit : menit;
+  sisaDetik = sisaDetik < 10 ? "0" + sisaDetik : sisaDetik;
+
+  return `${menit}:${sisaDetik}`;
 }
