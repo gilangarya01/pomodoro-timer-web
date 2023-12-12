@@ -1,19 +1,38 @@
 const startBtn = document.getElementById("start-btn");
-const resetBtn = document.getElementById("reset-btn");
 const waktu = document.getElementById("timer");
 const aktivitas = document.getElementById("activity");
+const runBtnArea = document.getElementById("running-btn-area");
+const resetBtn = document.getElementById("reset-btn");
+const pauseBtn = document.getElementById("pause-btn");
 
 let fokus = true;
 let banyakKerja = 0;
+let totalDetik;
 let intervalWaktu;
+let paused = false;
+let remainingTime = 0;
 
 startBtn.addEventListener("click", pomodoroFunc);
 resetBtn.addEventListener("click", resetPomodoro);
+pauseBtn.addEventListener("click", togglePause);
+
+function togglePause() {
+  paused = !paused;
+  if (paused) {
+    clearInterval(intervalWaktu);
+    pauseBtn.textContent = "Resume";
+  } else {
+    setWaktu(remainingTime);
+    pauseBtn.textContent = "Pause";
+  }
+}
 
 function resetPomodoro() {
   toggleButtons();
   clearInterval(intervalWaktu);
   resetWaktu();
+  paused = false;
+  pauseBtn.textContent = "Pause";
 }
 
 function resetWaktu() {
@@ -25,7 +44,7 @@ function resetWaktu() {
 
 function toggleButtons() {
   startBtn.classList.toggle("hide-btn");
-  resetBtn.classList.toggle("hide-btn");
+  runBtnArea.classList.toggle("hide-btn");
 }
 
 function pomodoroFunc() {
@@ -34,27 +53,32 @@ function pomodoroFunc() {
   if (fokus) {
     banyakKerja++;
     aktivitas.textContent = "Focus";
-    setWaktu(25 * 60);
+    totalDetik = 25 * 60;
+    setWaktu(totalDetik);
   } else {
     aktivitas.textContent = "Break";
     if (banyakKerja > 2) {
-      setWaktu(20 * 60);
+      totalDetik = 20 * 60;
       banyakKerja = 0;
     } else {
-      setWaktu(5 * 60);
+      totalDetik = 5 * 60;
     }
+    setWaktu(totalDetik);
   }
 }
 
 function setWaktu(totalDetik) {
   let detik = totalDetik;
   intervalWaktu = setInterval(() => {
-    waktu.textContent = formatWaktu(detik);
+    if (!paused) {
+      waktu.textContent = formatWaktu(detik);
+      remainingTime = detik;
 
-    if (detik-- <= 0) {
-      clearInterval(intervalWaktu);
-      fokus = !fokus;
-      pomodoroFunc();
+      if (detik-- <= 0) {
+        clearInterval(intervalWaktu);
+        fokus = !fokus;
+        pomodoroFunc();
+      }
     }
   }, 1000);
 }
