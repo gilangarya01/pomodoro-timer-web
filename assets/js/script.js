@@ -20,10 +20,10 @@ function togglePause() {
   paused = !paused;
   if (paused) {
     clearInterval(intervalWaktu);
-    pauseBtn.textContent = "Resume";
+    pauseBtn.innerHTML = `<i class="fa-solid fa-hourglass-start"></i>`;
   } else {
     setWaktu(remainingTime);
-    pauseBtn.textContent = "Pause";
+    pauseBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
   }
 }
 
@@ -32,7 +32,7 @@ function resetPomodoro() {
   clearInterval(intervalWaktu);
   resetWaktu();
   paused = false;
-  pauseBtn.textContent = "Pause";
+  pauseBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
 }
 
 function resetWaktu() {
@@ -68,13 +68,15 @@ function pomodoroFunc() {
 }
 
 function setWaktu(totalDetik) {
-  let detik = totalDetik;
+  remainingTime = totalDetik;
+  waktu.textContent = formatWaktu(totalDetik);
+
   intervalWaktu = setInterval(() => {
     if (!paused) {
-      waktu.textContent = formatWaktu(detik);
-      remainingTime = detik;
+      remainingTime--;
+      waktu.textContent = formatWaktu(remainingTime);
 
-      if (detik-- <= 0) {
+      if (remainingTime <= 0) {
         clearInterval(intervalWaktu);
         fokus = !fokus;
         pomodoroFunc();
